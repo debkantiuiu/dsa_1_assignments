@@ -8,17 +8,58 @@
 struct listNode
 {
     int item;
-    struct listNode *next;
+    struct listNode * next;
+    struct listNode * prev;
 };
 
-struct listNode *head;
-struct listNode *tail;
+struct listNode * head;
+
+struct listNode * tail;
 
 void initializeList()
 {
     head = 0;  //initially set to NULL
-	tail = 0;
+    tail = 0;
 }
+
+int insertFirst(int item) //insert at the beginning
+{
+	struct listNode * newNode ;
+	newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
+	newNode->item = item ;
+
+	if(head==0) //inserting the first item
+    {
+        newNode->next = 0;
+        newNode->prev = 0;
+        head = newNode;
+        tail = newNode;
+    }
+    else
+    {
+        newNode->next = head;
+        head->prev = newNode;
+        newNode->prev = 0;
+        head = newNode;
+    }
+	return SUCCESS_VALUE ;
+}
+
+
+int deleteAfter(int item)
+{
+    //write your codes here
+
+}
+
+int deleteLast()
+{
+    //write your codes here
+
+
+    return NULL_VALUE;
+}
+
 
 struct listNode * searchItem(int item)
 {
@@ -32,12 +73,7 @@ struct listNode * searchItem(int item)
 	return 0 ; //0 means invalid pointer in C, also called NULL value in C
 }
 
-void printTail()
-{
-    printf("Tail: %d\n", tail -> item);
-}
-
-void printList()
+void printListForward()
 {
     struct listNode * temp;
     temp = head;
@@ -47,173 +83,13 @@ void printList()
         temp = temp->next;
     }
     printf("\n");
-    //printTail();
 }
 
-//add required codes to insert item at the beginning, remember to properly set the tail pointer!
-int insertItem(int newItem)
+void printListBackward()
 {
-	struct listNode * newNode ;
-	newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
-	
-	newNode->item = newItem ;
-	
-	if ( head == 0) // no node now present here
-	{
-	    head = newNode;
-	}
-	else
-	{
-	    newNode -> next = head;
-	    head = newNode;
-	}
-	
-	//list = newNode ; //set list to point to newnode as this is now the first node
-	
-	if ( tail == 0 ) 
-	{
-	    tail = head;
-	}
+	//will print the list backward starting from the tail position
+
 }
-
-
-
-int insertLast(int item)
-{
-    if ( head == 0 )
-    {
-        insertItem(item);
-    }
-    else
-    {
-        struct listNode * newNode ;
-	    newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
-	
-	    newNode->item = item ;
-	    tail -> next = newNode;
-	    tail = newNode;
-    }
-    //printTail();
-}
-
-int insertBefore(int oldItem, int newItem)
-{
-    struct listNode *newNode ;
-	newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
-	
-	newNode->item = newItem;
-	newNode->next = 0;
-	//printf("New node value: %d", newNode->item);
-	
-    struct listNode *current, *previous;
-	current = head;
-	
-	while ( current != 0 )
-	{
-	    if ( current -> item == oldItem )
-	    {
-	        break; // item found
-	    }
-	    
-	    previous = current;
-	    current = current -> next;
-	}
-	
-	if ( current == head ) // head is the oldItem
-	{
-	    newNode -> next = head;
-	    head = newNode;
-	    
-	}
-	else if ( current == 0 ) // oldItem not found 
-	{
-	    printf("item not found");
-	}
-	else // now we need prev, as oldItem is the last or interior node
-	{
-	    newNode -> next = current;
-	    previous -> next = newNode;
-	}
-	
-	//printTail();
-}
-
-int insertAfter(int oldItem, int newItem)
-{
-    struct listNode *newNode ;
-	newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
-	
-	newNode->item = newItem;
-	newNode->next = 0;
-	//printf("New node value: %d", newNode->item);
-	
-    struct listNode *current, *previous;
-	current = head;
-	
-	while ( current != 0 )
-	{
-	    if ( current -> item == oldItem )
-	    {
-	        break; // item found
-	    }
-	    
-	    previous = current;
-	    current = current -> next;
-	}
-	
-	if ( current == 0 ) // oldItem not found
-	{
-	    printf("old item not found!!");
-	}
-	else // we have to decide whether oldItem node is the last node
-	{
-	    if ( current != tail )
-	    {
-	        newNode -> next = current -> next;
-	    }
-	    current -> next = newNode;
-	}
-}
-
-
-//add required codes to delete item, remember to properly set the tail pointer!
-int deleteAfter(int item)
-{
-    struct listNode *current, *previous;
-	current = head;
-	
-	while ( current != 0 )
-	{
-	    if ( current -> item == item )
-	    {
-	        break; // item found
-	    }
-	    
-	    previous = current;
-	    current = current -> next;
-	}
-	
-	if ( current == tail )
-	{
-	    printf("\nThere is no item after the item node, as it is the last node");
-	}
-	else // current is before than last
-	{
-	    struct listNode *nodeToBeDeleted = current -> next;
-	    current -> next = nodeToBeDeleted -> next;
-	    free(nodeToBeDeleted);
-	    
-	    if ( current -> next == 0)
-	    {
-	        printf("tail updated!");
-	        tail = current;
-	    }
-	    
-	    // printTail();
-	}
-}
-
-
 
 
 int main(void)
@@ -222,8 +98,7 @@ int main(void)
     while(1)
     {
         printf("1. Insert new item. 2. Delete item. 3. Search item. \n");
-        printf("4. (Add from homework). 5. Print. 6. exit. 7. Insert Item at last\n");
-        printf("8. Insert item before. 9. Insert item after 10. Delete item after\n");
+        printf("4. Print forward. 5. Print backward. 6. exit.\n");
 
         int ch;
         scanf("%d",&ch);
@@ -231,13 +106,12 @@ int main(void)
         {
             int item;
             scanf("%d", &item);
-            insertItem(item);
+            insertFirst(item);
         }
         else if(ch==2)
         {
-            int item;
-            scanf("%d", &item);
-            deleteAfter(item);
+            int item = deleteLast();
+            if(item!=NULL_VALUE) printf("Deleted: %d\n", item);
         }
         else if(ch==3)
         {
@@ -247,44 +121,18 @@ int main(void)
             if(res!=0) printf("Found.\n");
             else printf("Not found.\n");
         }
+        else if(ch==4)
+        {
+            printListForward();
+        }
         else if(ch==5)
         {
-            printList();
+            printListBackward();
         }
         else if(ch==6)
         {
             break;
         }
-        else if (ch == 7)
-        {
-            int item;
-            scanf("%d", &item);
-            insertLast(item);
-        }
-        else if (ch == 8)
-        {
-            int oldItem,  newItem;
-            scanf("%d %d", &oldItem, &newItem);
-            insertBefore(oldItem, newItem);
-        }
-        else if (ch == 9)
-        {
-            int oldItem,  newItem;
-            scanf("%d %d", &oldItem, &newItem);
-            insertAfter(oldItem, newItem);
-        }
-        else if (ch == 10)
-        {
-            int item;
-            scanf("%d", &item);
-            deleteAfter(item);
-        }
     }
 
 }
-
-
-
-
-
-
