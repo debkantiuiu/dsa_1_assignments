@@ -190,43 +190,79 @@ int insertAfter(int oldItem, int newItem) // bonus
 
 int deleteBefore(int item) // bonus
 {
-    struct listNode *current, *previous;
-	current = list;
+    struct listNode *current, *prev, *prev2;
 	
-	while ( current != 0 )
+	current = list;
+	prev = 0; prev2 = 0;
+	
+	while ( current -> item != item && current != 0 )
 	{
-	    if ( current -> item == item )
-	    {
-	        break; // item found
-	    }
-	    
-	    previous = current;
+	    prev2 = prev;
+	    prev = current;
 	    current = current -> next;
 	}
 	
-	if ( current == list ) // found item is the head, so there is no previous node, so delete 
+	if ( current == 0 )
 	{
-	    printf("Delete not possible!");
+	    printf("Item not found");
+	    return NULL_VALUE;
 	}
 	else
 	{
-	    previous -> next = current -> next;
-	    free(current);
+	    if ( prev == 0)
+	    {
+	        printf("Item found is in the head, so there's no node before head, so no node can be deleted\n");
+	        return NULL_VALUE;
+	    }
+	    else
+	    {
+	        // we have to delete prev
+	        if (prev2 == 0 )
+	        {
+	            list = current;
+	            free(prev);
+	        }
+	        else
+	        {
+	            prev2->next = current;
+	            free(prev);    
+	        }
+	        
+	        
+	        return SUCCESS_VALUE;
+	    }
 	}
 }
 
 int deleteAfter(int item)
 {
-	struct listNode *newNode ;
-	newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
-	newNode->item = item;
-	newNode->next = 0;
-	//printf("New node value: %d", newNode->item);
-	
-	struct listNode *temp;
-	temp = list;
+	struct listNode *current;
+	current = list;
 	
 	// findint the node with oldItem
+	
+	
+	while ( current -> item != item && current != 0 )
+	{
+	    //prev2 = prev;
+	    //prev = current;
+	    current = current -> next;
+	}
+	
+	if ( current == 0 )
+	{
+	    printf("Item not found");
+	    return NULL_VALUE;
+	}
+	else
+	{
+	    struct listNode *temp;
+	    temp = current -> next;
+	    
+	    current -> next = temp -> next;
+	    free(temp);
+	    return SUCCESS_VALUE;
+	}
 	
 }
 
@@ -234,17 +270,25 @@ int deleteLast()
 {
     struct listNode *temp, *prev;
 	temp = list;
-	prev = list;
+	prev = 0;
+	
+	if ( list == 0 )
+	{
+	    printf("No last node to delete");
+	    return NULL_VALUE;
+	}
 	
 	while ( temp->next != 0 ) // going to last node
 	{
 	    //printf("node value: %d", temp->item);
-	    temp = temp->next;
 	    prev = temp;
+	    temp = temp->next;
+	    
 	}
 	
-	if ( prev == temp ) // there's only head
+	if ( prev == 0 ) // there's only head
 	{
+	    list = 0;
 	    free(temp);
 	}
 	else
@@ -263,8 +307,10 @@ int main(void)
     while(1)
     {
         printf("1. Insert new item. 2. Delete item. 3. Search item. \n");
-        printf("4. Insert Last. 5. Insert Before 6. Insert After 7. Delete Before 8. Delete After.\n");
-        printf("9. Delete Last 10. Print. 11. exit.\n");
+        printf("4. Insert Last 5. Print. 6. exit.\n");
+        printf("7. Insert Before. 8. Insert After 9. Delete Before ");
+        printf("10. Delete After 11. Delete Last\n");
+        
 
         int ch;
         scanf("%d",&ch);
@@ -295,47 +341,46 @@ int main(void)
             scanf("%d", &item);
             insertLast(item);
         }
-        
         else if(ch==5)
+        {
+            printList();
+        }
+        else if(ch==6)
+        {
+            break;
+        }
+        
+        else if(ch==7)
         {
             int oldItem, newItem;
             scanf("%d %d", &oldItem, &newItem);
             insertBefore(oldItem, newItem);
         }
-        else if(ch==6)
+        else if(ch==8)
         {
             int oldItem, newItem;
             scanf("%d %d", &oldItem, &newItem);
             insertAfter(oldItem, newItem);
         }
-        else if(ch==7)
+        else if(ch==9)
         {
             int oldItem;
             scanf("%d", &oldItem);
             deleteBefore(oldItem);
         }
-        else if(ch==8)
+        else if(ch==10)
         {
             int oldItem;
             scanf("%d", &oldItem);
             deleteAfter(oldItem);
         }
-        else if(ch==9)
+        else if(ch==11)
         {
             deleteLast();
         }
-        else if(ch==10)
-        {
-            printList();
-        }
-        else if(ch==11)
-        {
-            break;
-        }
+        
     }
 
 }
-
-
 
 
