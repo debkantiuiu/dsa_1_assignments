@@ -47,18 +47,102 @@ void printList()
 //add required codes to insert item at the beginning, remember to properly set the tail pointer!
 int insertItem(int newItem)
 {
-	//write your codes here
+    struct listNode * newNode ;
+	newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
+	newNode->item = newItem ;
+    
+	if ( head == 0 )
+	{
+	    newNode->next = 0;
+	    head = newNode;
+	    tail = newNode;
+	}
+	else
+	{
+	    newNode -> next = head;
+	    head = newNode;
+	}
+	
+	//printf("head: %d\n", head -> item);
+	//printf("Tail: %d\n", tail -> item);
+	
+	return SUCCESS_VALUE;
+	
 }
 
 //add required codes to delete item, remember to properly set the tail pointer!
 int deleteBefore(int item)
 {
-
+    
+	struct listNode *current, *prev, *prev2;
+	
+	current = head;
+	prev = 0; prev2 = 0;
+	
+	while ( current -> item != item && current != 0 )
+	{
+	    prev2 = prev;
+	    prev = current;
+	    current = current -> next;
+	}
+	
+	if ( current == 0 )
+	{
+	    printf("Item not found");
+	    return NULL_VALUE;
+	}
+	else
+	{
+	    if ( prev == 0)
+	    {
+	        printf("Item found is in the head, so there's no node before head, so no node can be deleted\n");
+	        return NULL_VALUE;
+	    }
+	    else
+	    {
+	        // we have to delete prev
+	        if (prev2 == 0 )
+	        {
+	            head = current;
+	            free(prev);
+	        }
+	        else
+	        {
+	            prev2->next = current;
+	            free(prev);    
+	        }
+	        
+	        //printf("head: %d\n", head -> item);
+	        //printf("Tail: %d\n", tail -> item);
+	        
+	        return SUCCESS_VALUE;
+	    }
+	}
+	
 }
 
 int insertLast(int item)
 {
-    //write your codes here
+    struct listNode * newNode ;
+    newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
+    newNode -> item = item ;
+    newNode -> next = 0;
+    
+    if ( head == 0)
+    {
+        head = newNode;
+        tail = newNode;
+    }
+    else
+    {	
+    	tail -> next = newNode;
+    	tail = newNode;    
+    }
+    
+    //printf("head: %d\n", head -> item);
+    //printf("Tail: %d\n", tail -> item);
+	
+	return SUCCESS_VALUE;
 }
 
 
@@ -68,7 +152,7 @@ int main(void)
     while(1)
     {
         printf("1. Insert new item. 2. Delete item. 3. Search item. \n");
-        printf("4. (Add from homework). 5. Print. 6. exit.\n");
+        printf("4. Insert Last 5. Print. 6. exit.");
 
         int ch;
         scanf("%d",&ch);
@@ -92,6 +176,13 @@ int main(void)
             if(res!=0) printf("Found.\n");
             else printf("Not found.\n");
         }
+        else if(ch==4)
+        {
+            int item;
+            scanf("%d", &item);
+            insertLast(item);
+        }
+        
         else if(ch==5)
         {
             printList();
