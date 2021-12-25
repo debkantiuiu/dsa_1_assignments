@@ -9,57 +9,16 @@ struct listNode
 {
     int item;
     struct listNode * next;
-    struct listNode * prev;
 };
 
 struct listNode * head;
-
 struct listNode * tail;
 
 void initializeList()
 {
     head = 0;  //initially set to NULL
-    tail = 0;
+	tail = 0;
 }
-
-int insertFirst(int item) //insert at the beginning
-{
-	struct listNode * newNode ;
-	newNode = (struct listNode*) malloc (sizeof(struct listNode)) ;
-	newNode->item = item ;
-
-	if(head==0) //inserting the first item
-    {
-        newNode->next = 0;
-        newNode->prev = 0;
-        head = newNode;
-        tail = newNode;
-    }
-    else
-    {
-        newNode->next = head;
-        head->prev = newNode;
-        newNode->prev = 0;
-        head = newNode;
-    }
-	return SUCCESS_VALUE ;
-}
-
-
-int deleteAfter(int item)
-{
-    //write your codes here
-
-}
-
-int deleteLast()
-{
-    //write your codes here
-
-
-    return NULL_VALUE;
-}
-
 
 struct listNode * searchItem(int item)
 {
@@ -73,7 +32,7 @@ struct listNode * searchItem(int item)
 	return 0 ; //0 means invalid pointer in C, also called NULL value in C
 }
 
-void printListForward()
+void printList()
 {
     struct listNode * temp;
     temp = head;
@@ -85,10 +44,21 @@ void printListForward()
     printf("\n");
 }
 
-void printListBackward()
+//add required codes to insert item at the beginning, remember to properly set the tail pointer!
+int insertItem(int newItem)
 {
-	//will print the list backward starting from the tail position
+	//write your codes here
+}
 
+//add required codes to delete item, remember to properly set the tail pointer!
+int deleteBefore(int item)
+{
+
+}
+
+int insertLast(int item)
+{
+    //write your codes here
 }
 
 
@@ -98,7 +68,7 @@ int main(void)
     while(1)
     {
         printf("1. Insert new item. 2. Delete item. 3. Search item. \n");
-        printf("4. Print forward. 5. Print backward. 6. exit.\n");
+        printf("4. (Add from homework). 5. Print. 6. exit.\n");
 
         int ch;
         scanf("%d",&ch);
@@ -106,12 +76,13 @@ int main(void)
         {
             int item;
             scanf("%d", &item);
-            insertFirst(item);
+            insertItem(item);
         }
         else if(ch==2)
         {
-            int item = deleteLast();
-            if(item!=NULL_VALUE) printf("Deleted: %d\n", item);
+            int item;
+            scanf("%d", &item);
+            deleteBefore(item);
         }
         else if(ch==3)
         {
@@ -121,13 +92,9 @@ int main(void)
             if(res!=0) printf("Found.\n");
             else printf("Not found.\n");
         }
-        else if(ch==4)
-        {
-            printListForward();
-        }
         else if(ch==5)
         {
-            printListBackward();
+            printList();
         }
         else if(ch==6)
         {
